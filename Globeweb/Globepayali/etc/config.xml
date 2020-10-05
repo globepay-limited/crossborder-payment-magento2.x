@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2016 Globeweb. All rights reserved.
+ * See more information at http://www.hellomagento2.com
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Store/etc/config.xsd">
+    <default>
+        <payment>
+            <globepayalidirect>
+                <active>0</active>
+                <model>Globeweb\Globepayali\Model\Globepayali</model>
+                <title>Alipay</title>
+                <partner_id backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+                <md5_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+                <order_id_prefix>m2_</order_id_prefix>
+                <sort_order>1</sort_order>
+                <order_status>processing</order_status>
+                <debug>0</debug>
+            </globepayalidirect>
+        </payment>
+    </default>
+</config>

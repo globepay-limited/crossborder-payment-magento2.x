@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2016 Globeweb. All rights reserved.
+ * See more information at http://www.hellomagento2.com
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:App/etc/routes.xsd">
+    <router id="standard">
+        <route id="globepayali"> frontName="globepayali">>
+            <module name="Globeweb_Globepayali" />
+        </route>
+    </router>
+</config>
