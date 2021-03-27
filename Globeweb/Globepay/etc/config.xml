@@ -11,7 +11,7 @@
             <globepaydirect>
                 <active>0</active>
                 <model>Globeweb\Globepay\Model\Globepay</model>
-                <title>GlobePay</title>
+                <title>Globepay</title>
                 <partner_id backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
                 <md5_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
                 <order_id_prefix>m2_</order_id_prefix>

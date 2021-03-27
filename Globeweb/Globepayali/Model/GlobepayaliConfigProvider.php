@@ -7,6 +7,7 @@ namespace Globeweb\Globepayali\Model;
 
 use Magento\Checkout\Model\ConfigProviderInterface;
 use Magento\Payment\Helper\Data as PaymentHelper;
+use Globeweb\Globepayali\Model\Globepayali;
 
 class GlobepayaliConfigProvider implements ConfigProviderInterface
 {
@@ -18,7 +19,7 @@ class GlobepayaliConfigProvider implements ConfigProviderInterface
     /**
      * @var \Globeweb\Globepayali\Model\Globepayali
      */
-    protected $_globepayalidirect;
+    protected $_globepayaliDirect;
 
     /**
      * @param PaymentHelper $paymentHelper
@@ -27,7 +28,7 @@ class GlobepayaliConfigProvider implements ConfigProviderInterface
         PaymentHelper $paymentHelper
     ) {
         $this->_paymentHelper = $paymentHelper;
-        $this->_globepayalidirect = $this->_paymentHelper->getMethodInstance(Globepayali::ALIPAY_DIRECT_CODE);
+        $this->_globepayaliDirect = $this->_paymentHelper->getMethodInstance(Globepayali::ALIPAY_DIRECT_CODE);
     }
 
     /**
@@ -54,11 +55,11 @@ class GlobepayaliConfigProvider implements ConfigProviderInterface
      */
     protected function getRedirectUrl()
     {
-        return $this->_globepayalidirect->getRedirectUrl();
+        return $this->_globepayaliDirect->getRedirectUrl();
     }
 
     protected function getGlobepayaliLogoUrl()
     {
-        return $this->_globepayalidirect->getGlobepayaliLogoUrl();
+        return $this->_globepayaliDirect->getGlobepayaliLogoUrl();
     }
 }

@@ -135,9 +135,9 @@ class Redirect extends Action
             $sign=strtolower(hash('sha256',$valid_string));
             
             if($this->is_wechat_client()){
-                $api_uri ='https://pay.globepay.co/api/v1.0/wechat_jsapi_gateway/partners/%s/orders/%s';
+                $api_uri ='https://pay.globepay.co//api/v1.0/wechat_jsapi_gateway/partners/%s/orders/%s';
             }else{
-                $api_uri ='https://pay.globepay.co/api/v1.0/gateway/partners/%s/orders/%s';
+                $api_uri ='https://pay.globepay.co//api/v1.0/gateway/partners/%s/orders/%s';
             }
         
             $url = sprintf($api_uri,$partner_code,$out_trade_no);

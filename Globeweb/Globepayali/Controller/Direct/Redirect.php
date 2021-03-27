@@ -205,10 +205,10 @@ class Redirect extends Action
             $channel=null;
             if($this->is_app_client()){
                 $channel='Alipay';
-                $api_uri ='https://pay.globepay.co/api/v1.0/h5_payment/partners/%s/orders/%s';
+                $api_uri ='https://pay.globepay.co//api/v1.0/h5_payment/partners/%s/orders/%s';
             }else{
                 $channel='Alipay';
-                $api_uri ='https://pay.globepay.co/api/v1.0/web_gateway/partners/%s/orders/%s';
+                $api_uri ='https://pay.globepay.co//api/v1.0/web_gateway/partners/%s/orders/%s';
             }
 
             $url = sprintf($api_uri,$partner_code,$out_trade_no);

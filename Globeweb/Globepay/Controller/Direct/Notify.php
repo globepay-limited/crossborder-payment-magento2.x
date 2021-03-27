@@ -82,7 +82,7 @@ class Notify extends Action
 
         $order_id = $object->partner_order_id;
 
-        $url = "https://pay.globepay.co/api/v1.0/gateway/partners/$partner_code/orders/$order_id";
+        $url = "https://pay.globepay.co//api/v1.0/gateway/partners/$partner_code/orders/$order_id";
 
         $time = time() . '000';
         $nonce_str = substr(str_shuffle('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'), 0, 10);
