@@ -21,6 +21,11 @@ define(
                 method = 'post',
                 paymentData = quote.paymentMethod();
 
+            // 修复 Property "DisableTmpl" does not have accessor method "getDisableTmpl" in class "Magento\Quote\Api\Data\PaymentInterface"
+            if(paymentData.__disableTmpl) {
+                delete paymentData.__disableTmpl
+            }
+
             /**
              * Checkout for guest and registered customer.
              */
