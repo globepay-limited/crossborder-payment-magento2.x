@@ -247,7 +247,8 @@ class Redirect extends Action
         }
         $subject = mb_substr($subject, 0, 64, 'utf-8');
         $subject = $subject . '... 共'. $this->_quote->getItemsSummaryQty() . '件';
-        return $subject;
+        $orderNo = $this->_quote->getReservedOrderId();
+        return "#$orderNo; $subject";
     }
 
     /**
