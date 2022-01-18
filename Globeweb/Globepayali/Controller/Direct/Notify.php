@@ -33,7 +33,10 @@ class Notify extends Action
      */
     protected $_quoteRepository;
 
-    public function __construct(\Magento\Framework\App\Action\Context $context, \Magento\Sales\Model\Order $orderFactory, PaymentHelper $paymentHelper)
+    public function __construct(
+        \Magento\Framework\App\Action\Context $context,
+        \Magento\Sales\Model\Order $orderFactory,
+        PaymentHelper $paymentHelper)
     {
         parent::__construct($context);
         $quoteRepository = $this->_objectManager->get('\Magento\Quote\Api\CartRepositoryInterface');
@@ -41,6 +44,15 @@ class Notify extends Action
         $this->_orderFactory = $orderFactory;
         $this->_paymentInstance = $paymentHelper->getMethodInstance(GlobepayaliCode::ALIPAY_DIRECT_CODE);
         $this->_quoteRepository = $quoteRepository;
+
+        // CsrfAwareAction Magento2.3 compatibility 兼容2.3以上不支持POST请求
+        if (interface_exists("\Magento\Framework\App\CsrfAwareActionInterface")) {
+            $request = $this->getRequest();
+            if ($request && $request->isPost() && empty($request->getParam('form_key'))) {
+                $formKey = $this->_objectManager->get(\Magento\Framework\Data\Form\FormKey::class);
+                $request->setParam('form_key', $formKey->getFormKey());
+            }
+        }
     }
 
     public function execute()
