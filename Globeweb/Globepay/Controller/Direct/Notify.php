@@ -139,8 +139,11 @@ class Notify extends Action
 
         $order = $this->_orderFactory->loadByIncrementId($quote->getReservedOrderId());
         // 根据orderid 判断该笔订单是否处理过
-
-        if (! $order->getId()) {
+        $cacheName = 'handle_order_id_'.$quote->getReservedOrderId();
+        $cache = $this->_objectManager->get(\Magento\Framework\App\CacheInterface::class);
+        $cached = $cache->load($cacheName);
+        if (! $order->getId() && !$cached) {
+            $cache->save(1,$cacheName,['globepay'],86400);
             $transaction_id = $object->order_id;
             $p = $this->_objectManager->get('\Magento\Quote\Api\CartManagementInterface');
 

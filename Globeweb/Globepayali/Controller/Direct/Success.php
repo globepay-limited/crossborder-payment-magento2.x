@@ -136,35 +136,55 @@ class Success extends Action
 
         $order = $this->_orderFactory->loadByIncrementId($quote->getReservedOrderId());
         // 根据orderid 判断该笔订单是否处理过
-
-        if (! $order->getId()) {
+        $cacheName = 'handle_order_id_'.$quote->getReservedOrderId();
+        $cache = $this->_objectManager->get(\Magento\Framework\App\CacheInterface::class);
+        $cached = $cache->load($cacheName);
+        if (! $order->getId() && !$cached) {
+            $cache->save(1,$cacheName,['globepay'],86400);
             $transaction_id = $resArr->order_id;
-            $this->_objectManager->get('\Magento\Quote\Api\CartManagementInterface')->placeOrder($quote->getId());
-			$order = $this->_orderFactory->loadByIncrementId($quote->getReservedOrderId());
+            $p = $this->_objectManager->get('\Magento\Quote\Api\CartManagementInterface');
 
-            $status = $order->getPayment()->getMethodInstance()->getOrderStatus();
+            $p->placeOrder($quote->getId());
+            $order = $this->_orderFactory->loadByIncrementId($quote->getReservedOrderId());
+            $instance = $order->getPayment()->getMethodInstance();
+
+            $status = $instance->getOrderStatus();
 
             $order->setStatus($status);
 
-            $order->addStatusToHistory($status, sprintf('Trade finished. Trade No in Wallet is %s', $transaction_id), true);
+            $order->addStatusToHistory($status, __('Trade finished. Trade No in Globepay is %s', $transaction_id), true);
 
             $order->save();
-
             $order->getPayment()
-			->setTransactionId($transaction_id)
-            ->setAdditionalInformation('transaction_id', $transaction_id)
-            ->save();
+                ->setAdditionalInformation('transaction_id', $transaction_id)
+                ->save();
 
             $orderSender = $this->_objectManager->get('\Magento\Sales\Model\Order\Email\Sender\OrderSender');
             $orderSender->send($order);
+
+            // 在payment method 中可以取到该值
+            $order->getPayment()->setTransactionId($transaction_id);
+
+            if ($order->canInvoice()) {
+                $invoiceService = $this->_objectManager->get('\Magento\Sales\Model\Service\InvoiceService');
+
+                $invoice = $invoiceService->prepareInvoice($order);
+                $invoice->setRequestedCaptureCase(\Magento\Sales\Model\Order\Invoice::CAPTURE_ONLINE);
+                $invoice->register();
+
+                $tansaction = $this->_objectManager->get('\Magento\Framework\DB\Transaction');
+                $transactionSave = $tansaction->addObject($invoice)->addObject($invoice->getOrder());
+                $transactionSave->save();
+            }
         }
 
-        $quote->setIsActive(false);
-        $this->_checkoutSession->setLastSuccessQuoteId($quote->getId());
-        $this->_checkoutSession->setLastQuoteId($quote->getId());
+
+        $this->_quote = $this->quoteRepository->get($quote_id);
+        $order = $this->_orderFactory->loadByIncrementId($this->_quote->getReservedOrderId());
+        $this->_checkoutSession->setLastSuccessQuoteId($this->_quote->getId());
+        $this->_checkoutSession->setLastQuoteId($this->_quote->getId());
         $this->_checkoutSession->setLastOrderId($order->getId());
-        $this->_checkoutSession->setLastRealOrderId($order->getIncrementId());
+
         $this->_redirect('checkout/onepage/success');
-        return;
     }
 }
