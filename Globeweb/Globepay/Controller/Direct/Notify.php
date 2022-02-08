@@ -57,6 +57,7 @@ class Notify extends Action
 
     public function execute()
     {
+        sleep(10);
         $json = isset($GLOBALS['HTTP_RAW_POST_DATA']) ? $GLOBALS['HTTP_RAW_POST_DATA'] : '';
         if (empty($json)) {
             $json = file_get_contents("php://input");

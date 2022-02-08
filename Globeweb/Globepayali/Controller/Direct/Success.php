@@ -184,7 +184,7 @@ class Success extends Action
         $this->_checkoutSession->setLastSuccessQuoteId($this->_quote->getId());
         $this->_checkoutSession->setLastQuoteId($this->_quote->getId());
         $this->_checkoutSession->setLastOrderId($order->getId());
-
+        $this->_checkoutSession->setLastRealOrderId($order->getIncrementId());
         $this->_redirect('checkout/onepage/success');
     }
 }
