@@ -121,9 +121,21 @@ class Success extends Action
         }
 
         if (!isset($resArr->result_code)|| $resArr->result_code != 'PAY_SUCCESS') {
-            $this->messageManager->addError("订单支付失败! ".print_r($resArr,true));
-            $this->_redirect('checkout/cart/');
-			return;
+            sleep(2);
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_POST, false);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $head_arr);
+            curl_setopt($ch, CURLOPT_TIMEOUT, 120);
+            $result = curl_exec($ch);
+            curl_close($ch);
+            $resArr = json_decode($result, false);
+            if (!isset($resArr->result_code)|| $resArr->result_code != 'PAY_SUCCESS') {
+                $this->messageManager->addError("订单支付失败! " . print_r($resArr, true));
+                $this->_redirect('checkout/cart/');
+                return;
+            }
         }
 
         $quote_id = substr($order_id, strlen($order_id_prefix), - 6);
