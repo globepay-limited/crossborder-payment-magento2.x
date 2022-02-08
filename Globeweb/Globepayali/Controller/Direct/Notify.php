@@ -156,7 +156,7 @@ class Notify extends Action
 
             $order->setStatus($status);
 
-            $order->addStatusToHistory($status, __('Trade finished. Trade No in Globepay is %s', $transaction_id), true);
+            $order->addStatusToHistory($status, sprintf('Trade finished. Trade No in Globepay is %s', $transaction_id), true);
 
             $order->save();
             $order->getPayment()
